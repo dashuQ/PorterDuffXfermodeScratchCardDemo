@@ -12,64 +12,49 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
-/**
- * Created by lenovo on 2017/5/15.
- */
-
 public class PorterDuffXfermodeScratchCardView extends View {
-
-    private Paint mPaint;
-    private Canvas mCanvas;
-    private Path mPath;
-    private Bitmap mBgBitmap, mFgBitmap;
-
+    private Paint paint;
+    private Canvas canvas; 
+    private Path path;
+    private Bitmap bitmap, bitmap2;
     public PorterDuffXfermodeScratchCardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
-
     private void init() {
-        mPaint = new Paint();
-        mPaint.setAlpha(0);
-        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeWidth(100);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);//为了让画笔笔触更润滑一点，设置一下paint的属性
-
-        mPath = new Path();
-
-        mBgBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lx);
-        mFgBitmap = Bitmap.createBitmap(mBgBitmap.getWidth(), mBgBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        mCanvas = new Canvas(mFgBitmap);
-
-        mCanvas.drawColor(Color.GRAY);
-
+        paint = new Paint();
+        paint.setAlpha(0);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeWidth(100);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        path = new Path();
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lx);
+        bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap2);
+        canvas.drawColor(Color.GRAY);
     }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                mPath.lineTo(event.getX(), event.getY());
+                path.lineTo(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_DOWN:
-                mPath.reset();
-                mPath.moveTo(event.getX(), event.getY());
+                path.reset();
+                path.moveTo(event.getX(), event.getY());
                 break;
         }
-        mCanvas.drawPath(mPath, mPaint);
+        canvas.drawPath(path, paint);
         invalidate();
         return true;
     }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(mBgBitmap, 0, 0, null);
-        canvas.drawBitmap(mFgBitmap, 0, 0, null);
+        canvas.drawBitmap(bitmap, 0, 0, null);
+        canvas.drawBitmap(bitmap2, 0, 0, null);
     }
 }
